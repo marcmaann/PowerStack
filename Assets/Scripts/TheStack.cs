@@ -18,73 +18,58 @@ public class TheStack : MonoBehaviour {
     private float secondaryPosition;
     private Vector3 desiredPosition;
 
-    private void Start () {
+    private void Start() {
         theStack = new GameObject[transform.childCount];
-        for (int i = 0; i < transform.childCount; i++)
-        {
+        for (int i = 0; i < transform.childCount; i++) {
             theStack[i] = transform.GetChild(i).gameObject;
         }
         stackIndex = transform.childCount - 1;
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (PlaceTile())
-            {
+    }
 
-           
-            SpawnTile();
-            scoreCount++;
-        }
-            else
-            {
+    // Update is called once per frame
+    void Update() {
+        if (Input.GetMouseButtonDown(0)) {
+            if (PlaceTile()) {
+                SpawnTile();
+                scoreCount++;
+            } else {
                 EndGame();
             }
-                }
+        }
         MoveTile();
         //Move stack
         transform.position = Vector3.Lerp(transform.position, desiredPosition, STACK_MOVING_SPEED * Time.deltaTime);
-	}
-    private void MoveTile()
-    {
+    }
+    private void MoveTile() {
         tileTransition += Time.deltaTime * tileSpeed;
-        if (isMovingOnX)
-        {
+        if (isMovingOnX) {
             theStack[stackIndex].transform.localPosition = new Vector3(Mathf.Sin(tileTransition) * BOUNDS_SIZE, scoreCount, secondaryPosition);
-        }
-        else
-        {
+        } else {
             theStack[stackIndex].transform.localPosition = new Vector3(secondaryPosition, scoreCount, Mathf.Sin(tileTransition) * BOUNDS_SIZE);
         }
     }
 
-    private void SpawnTile()
-    {
+    private void SpawnTile() {
         stackIndex--;
-        if(stackIndex < 0)
-        {
+        if (stackIndex < 0) {
             stackIndex = transform.childCount - 1;
         }
         desiredPosition = (Vector3.down) * scoreCount;
-   theStack[stackIndex].transform.localPosition = new Vector3(0, scoreCount, 0);
+        theStack[stackIndex].transform.localPosition = new Vector3(0, scoreCount, 0);
     }
 
-    private bool PlaceTile()
-    {
+    private bool PlaceTile() {
         Transform t = theStack[stackIndex].transform;
         secondaryPosition = isMovingOnX ? t.localPosition.x : t.localPosition.z;
         isMovingOnX = !isMovingOnX;
-        
-        return true; 
-     
-        
+
+        return true;
+
+
     }
 
-    private void EndGame()
-    {
+    private void EndGame() {
 
     }
 }
